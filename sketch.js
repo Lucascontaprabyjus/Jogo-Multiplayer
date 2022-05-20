@@ -19,9 +19,22 @@ function setup() {
 }
 
 function draw() {
+
   background(backgroundImage);
+  //Atualizando os valores
+  if(Playercount == 2){
+  game.UpdateState(1)
+}
+
+if(Gamestate == 1){
+
+game.play();
+
+}
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
+

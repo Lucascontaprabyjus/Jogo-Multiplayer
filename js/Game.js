@@ -13,5 +13,18 @@ class Game {
     gameStateRef.on("value",function(data){
       Gamestate = data.val();
     });
+
+    
+  }
+  updateState(state){
+    database.ref("/").update({
+      Gamestate: state
+    })
+  }
+
+  play(){
+
+
+    
   }
 }
