@@ -34,14 +34,15 @@ class Form {
   MousePressed(){
 
   this.playButton.mousePressed(()=>{
-
-this.playButton.hide();
-this.input.hide();
-var msg = `Olá.`;
-this.greeting.html(msg);
-
-  })
- 
-
+  this.playButton.hide();
+  this.input.hide();
+  var msg = `Olá ${this.input.value()}</br>!Seja Bem-vindo!`;
+  this.greeting.html(msg);
+  Playercount +=1;
+  player.name = this.input.value();
+  player.index = Playercount;
+  player.addPlayer();
+  player.updateCount(Playercount);
+  });
   };
 }
