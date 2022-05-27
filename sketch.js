@@ -4,9 +4,14 @@ var bgImg;
 var database;
 var form, player;
 var Playercount, Gamestate;
+var pistaImg;
+var car1, car2, cars = [], car1Img, car2Img;
 
 function preload() {
   backgroundImage = loadImage("./assets/planodefundo.png");
+  pistaImg = loadImage("assets/track.jpg");
+  car1Img = loadImage("assets/car1.png");
+  car2Img = loadImage("assets/car2.png");
 }
 
 function setup() {
