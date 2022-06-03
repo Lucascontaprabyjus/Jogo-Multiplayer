@@ -31,8 +31,8 @@ class Form {
     this.setElementsStyle();
     this.MousePressed();
   }
+  //pressionamento do botão jogar
   MousePressed(){
-
   this.playButton.mousePressed(()=>{
   this.playButton.hide();
   this.input.hide();
@@ -43,6 +43,7 @@ class Form {
   player.index = Playercount;
   player.addPlayer();
   player.updateCount(Playercount);
+  player.getDistance();
   });
   };
 }

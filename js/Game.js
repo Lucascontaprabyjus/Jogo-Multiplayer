@@ -1,5 +1,10 @@
 class Game {
-  constructor() {}
+  constructor() {
+
+    this.resetTitle = createElement("h2");
+    this.resetButton = createButton("");
+
+  }
 
   start() {
     form = new Form();
@@ -17,7 +22,7 @@ class Game {
   car2.scale=0.1
 
     //adicionanado a matriz
-    cars=[car1, car2]
+    cars=[car1, car2];
     
   }
 
@@ -39,32 +44,61 @@ class Game {
     form.hide();
     form.titleImg.position(40,50);
     form.titleImg.class("gameTitleAfterEffect");
+
+    this.resetTitle.html("Reiniciar Jogo");
+    this.resetTitle.class("resetText");
+    this.resetTitle.position(width/2 + 200,40);
+
+    this.resetButton.class("resetButton");
+    this.resetButton.position(width/2 + 230,100);
+  }
+
+  handleResetButton(){
+
   }
 
   play(){
 
     this.handleElements();
+    this.handleResetButton();
 
     Player.getPlayersInfo();
 
     if(allPlayers !== undefined){
       image(pistaImg,0,-height*5,width,height*6);
+
+      var index = 0;
+      for(var plr in allPlayers){
+        index = index + 1;
+
+        //posição dos jogadores
+        var x = allPlayers[plr].positionX;
+        var y = height - allPlayers[plr].positionY;
+
+        cars[index-1].position.x = x;
+        cars[index-1].position.y = y;
+
+        if(index === player.index){
+          stroke(10);
+          fill("red");
+          ellipse(x,y,60,60);
+        }
+
+
+
+      }
       
-
-        this.playerControl();
+      this.playerControl();
       drawSprites();
+      
     }
-
-
-
-    
   }
 
 //função para controlar os jogadores
 playerControl(){
 if(keyIsDown(UP_ARROW)){
-player.positionY += 10
-//player.Update();
+player.positionY += 10;
+player.update();
 }
 
 
