@@ -5,6 +5,7 @@ var database;
 var form, player;
 var Playercount, Gamestate;
 var pistaImg;
+var allPlayers;
 var car1, car2, cars = [], car1Img, car2Img;
 
 function preload() {
@@ -28,7 +29,7 @@ function draw() {
   background(backgroundImage);
   //Atualizando os valores
   if(Playercount == 2){
-  game.UpdateState(1)
+  game.updateState(1)
 }
 
 if(Gamestate == 1){
