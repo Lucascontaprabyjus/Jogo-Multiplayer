@@ -53,8 +53,16 @@ class Game {
     this.resetButton.position(width/2 + 230,100);
   }
 
+  //botão de reset
   handleResetButton(){
-
+    this.resetButton.mousePressed(()=>{
+      database.ref("/").set({
+        Gamestate: 0,
+        Playercount: 0,
+        players:{}
+      })
+      window.location.reload();
+    })
   }
 
   play(){
@@ -63,6 +71,7 @@ class Game {
     this.handleResetButton();
 
     Player.getPlayersInfo();
+  
 
     if(allPlayers !== undefined){
       image(pistaImg,0,-height*5,width,height*6);
@@ -82,6 +91,7 @@ class Game {
           stroke(10);
           fill("red");
           ellipse(x,y,60,60);
+          camera.position.y= cars[index-1].position.y
         }
 
 
@@ -100,6 +110,14 @@ if(keyIsDown(UP_ARROW)){
 player.positionY += 10;
 player.update();
 }
+if(keyIsDown(LEFT_ARROW)){
+player.positionX -= 10;
+player.update();
+}
+if(keyIsDown(RIGHT_ARROW)){
+player.positionX += 10;
+player.update();
+ }
 
 
 }
