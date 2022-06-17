@@ -27,6 +27,7 @@ class Game {
     //criando grupos
     gCoin = new Group();
     gFuel = new Group();
+    gObstacle = new Group();
 
     var obstaclesPositions = [
       { x: width / 2 + 250, y: height - 800, image: obstacle2Image },
@@ -44,7 +45,8 @@ class Game {
     ];
 
     this.addSprites(gCoin,20,coinImg,0.1);
-    this.addSprites(gFuel,7,fuelImg,0.1);
+    this.addSprites(gFuel,7,fuelImg,0.04);
+    this.addSprites(gObstacle, obstaclesPositions.length, obstacle1Image, 0.04, obstaclesPositions);
     
   }
 
@@ -138,12 +140,20 @@ player.update();
 }
 
 //adiciona os sprites no jogo
-addSprites(spriteGroup, numberOfSprites, spriteImage, scale){
+addSprites(spriteGroup, numberOfSprites, spriteImage, scale, positions=[]){
   for(var i=0; i<numberOfSprites; i++){
     var x,y;
+    if(positions.length > 0){
+      x = positions[i].x;
+      y = positions[i].y;
+      spriteImage = positions[i].image;
+    }
+    else{
+      x = random(width/2 - 150, width/2 + 150);
+      y = random(-height*4.5, height-400);
+    }
 
-    x = random(width/2 - 150, width/2 + 150);
-    y = random(-height*4.5, height-400);
+    
 
     var sprite = createSprite(x,y);
     sprite.addImage("sprite", spriteImage);
