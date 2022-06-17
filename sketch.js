@@ -4,15 +4,18 @@ var bgImg;
 var database;
 var form, player;
 var Playercount, Gamestate;
-var pistaImg;
+var pistaImg, fuelImg, coinImg;
 var allPlayers;
 var car1, car2, cars = [], car1Img, car2Img;
+var gCoin, gFuel;
 
 function preload() {
   backgroundImage = loadImage("./assets/planodefundo.png");
   pistaImg = loadImage("assets/track.jpg");
   car1Img = loadImage("assets/car1.png");
   car2Img = loadImage("assets/car2.png");
+  fuelImg = loadImage("assets/fuel.png");
+  coinImg = loadImage("assets/goldCoin.png");
 }
 
 function setup() {
