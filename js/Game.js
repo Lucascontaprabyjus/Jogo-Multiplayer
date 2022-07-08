@@ -161,7 +161,21 @@ showLife(){
   fill("red");
   rect(width/2-100,height - player.positionsY - 400,player.life,20);
   pop();
+
 }
+
+//mostrar combistível 
+showFuel(){
+  push();
+  image(fuelImg,width/2-130, height - player.positionsY - 400, 20,20);
+  fill("white");
+  rect(width/2-100,height - player.positionsY - 400, 185,20);
+  fill("red");
+  rect(width/2-100,height - player.positionsY - 400,player.fuel,20);
+  pop();
+
+}
+
 
 //função para controlar os jogadores
 playerControl(){
