@@ -3,12 +3,13 @@ var backgroundImage;
 var bgImg;
 var database;
 var form, player;
-var Playercount, Gamestate;
+var Playercount, Gamestate, CarsAtEnd;
 var pistaImg, fuelImg, coinImg;
 var allPlayers;
 var car1, car2, cars = [], car1Img, car2Img;
 var gCoin, gFuel, gObstacle;
 var obstacle1Image, obstacle2Image;
+var lifeImg;
 
 function preload() {
   backgroundImage = loadImage("./assets/planodefundo.png");
@@ -19,6 +20,7 @@ function preload() {
   coinImg = loadImage("assets/goldCoin.png");
   obstacle1Image = loadImage("assets/obstacle1.png");
   obstacle2Image = loadImage("assets/obstacle2.png");
+  lifeImg = loadImage("assets/life.png");
 }
 
 function setup() {

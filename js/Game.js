@@ -83,7 +83,8 @@ class Game {
       database.ref("/").set({
         Gamestate: 0,
         Playercount: 0,
-        players:{}
+        players:{},
+        CarsAtEnd: 0,
       })
       window.location.reload();
     })
@@ -95,10 +96,15 @@ class Game {
     this.handleResetButton();
 
     Player.getPlayersInfo();
+
+    player.getCarsAtEnd();
   
 
     if(allPlayers !== undefined){
       image(pistaImg,0,-height*5,width,height*6);
+
+      //inserir o placar!
+      this.showLife();
 
       var index = 0;
       for(var plr in allPlayers){
@@ -119,9 +125,43 @@ class Game {
         }
       }
       this.playerControl();
+     
+      //linha de chegada
+      const finishLine = -height*6 - 100;
+
+      if(player.positionY > finishLine){
+        player.rank +=1;
+        Player.updateCarsAtEnd(player.rank);
+        player.update();
+        Gamestate = 2;
+        this.showRank();
+      }
+
       drawSprites();
     }
   }
+
+//sweet alert do ranking
+showRank(){
+  swal({
+    title: `Incrível! ${"\n"}Rank${"\n"}${player.rank}`,
+    text: "Você alcançou a linha de chegada com sucesso!",
+    imageUrl:  "https://raw.githubusercontent.com/vishalgaddam873/p5-multiplayer-car-race-game/master/assets/cup.png",
+    imageSize: "100x100",
+    confirmButtonText: "Ok",
+  });
+}
+
+//mostrar as vidas
+showLife(){
+  push();
+  image(lifeImg,width/2-130, height - player.positionsY - 400, 20,20);
+  fill("white");
+  rect(width/2-100,height - player.positionsY - 400, 185,20);
+  fill("red");
+  rect(width/2-100,height - player.positionsY - 400,player.life,20);
+  pop();
+}
 
 //função para controlar os jogadores
 playerControl(){
