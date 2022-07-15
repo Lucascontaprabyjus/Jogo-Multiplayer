@@ -4,6 +4,12 @@ class Game {
     this.resetTitle = createElement("h2");
     this.resetButton = createButton("");
 
+    this.leaderboardTitle = createElement("h2");
+
+    this.leader1 = createElement("h2");
+    this.leader2= createElement("h2");
+    
+
   }
 
   start() {
@@ -75,6 +81,57 @@ class Game {
 
     this.resetButton.class("resetButton");
     this.resetButton.position(width/2 + 230,100);
+
+    this.leaderboardTitle.html("Placar");
+    this.leaderboardTitle.class("resetText");
+    this.leaderboardTitle.position(width/3 - 60, 40);
+
+    this.leader1.class("leadersText");
+    this.leader1.position(width/3 - 50, 80);
+
+    this.leader2.class("leadersText");
+    this.leader2.position(width/3 - 50, 130);
+  }
+
+  //placar
+  showLeaderboard(){
+    var leader1, leader2;
+    var players = Object.values(allPlayers);
+
+    if((players[0].rank === 0 && players[1].rank === 0) || players[0].rank == 1){
+      leader1 = 
+      players[0].rank +
+      "&emsp;" + //4 espaços
+      players[0].name +
+      "&emsp;" + //4 espaços
+      players[0].score
+
+      leader2 = 
+      players[1].rank +
+      "&emsp;" + //4 espaços
+      players[1].name +
+      "&emsp;" + //4 espaços
+      players[1].score
+    }
+
+    if(players[1].rank === 1){
+      leader1 = 
+      players[1].rank +
+      "&emsp;" + //4 espaços
+      players[1].name +
+      "&emsp;" + //4 espaços
+      players[1].score
+
+      leader2 = 
+      players[0].rank +
+      "&emsp;" + //4 espaços
+      players[0].name +
+      "&emsp;" + //4 espaços
+      players[0].score
+    }
+
+    this.leader1.html(leader1);
+    this.leader2.html(leader2);
   }
 
   //botão de reset
@@ -103,8 +160,11 @@ class Game {
     if(allPlayers !== undefined){
       image(pistaImg,0,-height*5,width,height*6);
 
-      //inserir o placar!
+      //placar
+      this.showLeaderboard();
+      //barra de vida
       this.showLife();
+
 
       var index = 0;
       for(var plr in allPlayers){
@@ -122,12 +182,15 @@ class Game {
           fill("red");
           ellipse(x,y,80,80);
           camera.position.y= cars[index-1].position.y
+
+          this.handleFuel(index);
+          this.handleCoins(index);
         }
       }
       this.playerControl();
      
       //linha de chegada
-      const finishLine = -height*6 - 100;
+      const finishLine = height*6 - 100;
 
       if(player.positionY > finishLine){
         player.rank +=1;
@@ -139,6 +202,30 @@ class Game {
 
       drawSprites();
     }
+  }
+
+  handleFuel(index){
+    cars[index-1].overlap(gFuel, function(collector,collected){
+      player.fuel = 185;
+      collected.remove();
+    });
+
+    if(player.fuel > 0){
+      player.fuel -= 0.3;
+    }
+
+    if(player.fuel <=0){
+      Gamestate = 2;
+      //this.gameOver();
+    }
+  }
+
+  handleCoins(index){
+    cars[index-1].overlap(gCoin, function(collector,collected){
+      player.score += 1;
+      player.update();
+      collected.remove();
+    });
   }
 
 //sweet alert do ranking
@@ -155,27 +242,13 @@ showRank(){
 //mostrar as vidas
 showLife(){
   push();
-  image(lifeImg,width/2-130, height - player.positionsY - 400, 20,20);
+  image(lifeImg,width/2-130, height - player.positionY - 400, 20,20);
   fill("white");
-  rect(width/2-100,height - player.positionsY - 400, 185,20);
+  rect(width/2-100,height - player.positionY - 400, 185,20);
   fill("red");
-  rect(width/2-100,height - player.positionsY - 400,player.life,20);
+  rect(width/2-100,height - player.positionY - 400,player.life,20);
   pop();
-
 }
-
-//mostrar combistível 
-showFuel(){
-  push();
-  image(fuelImg,width/2-130, height - player.positionsY - 400, 20,20);
-  fill("white");
-  rect(width/2-100,height - player.positionsY - 400, 185,20);
-  fill("red");
-  rect(width/2-100,height - player.positionsY - 400,player.fuel,20);
-  pop();
-
-}
-
 
 //função para controlar os jogadores
 playerControl(){
@@ -206,9 +279,6 @@ addSprites(spriteGroup, numberOfSprites, spriteImage, scale, positions=[]){
       x = random(width/2 - 150, width/2 + 150);
       y = random(-height*4.5, height-400);
     }
-
-    
-
     var sprite = createSprite(x,y);
     sprite.addImage("sprite", spriteImage);
     sprite.scale = scale;
