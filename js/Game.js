@@ -8,6 +8,8 @@ class Game {
 
     this.leader1 = createElement("h2");
     this.leader2= createElement("h2");
+
+    this.playerMoving = false;
     
 
   }
@@ -164,6 +166,7 @@ class Game {
       this.showLeaderboard();
       //barra de vida
       this.showLife();
+      this.showFuel();
 
 
       var index = 0;
@@ -210,7 +213,7 @@ class Game {
       collected.remove();
     });
 
-    if(player.fuel > 0){
+    if(player.fuel > 0 && this.playerMoving){
       player.fuel -= 0.3;
     }
 
@@ -250,21 +253,36 @@ showLife(){
   pop();
 }
 
+//mostrar o combustível
+showFuel(){
+push();
+  image(fuelImg,width/2-130, height - player.positionY - 300, 20,20);
+  fill("white");
+  rect(width/2-100,height - player.positionY - 300, 185,20);
+  fill("brown");
+  rect(width/2-100,height - player.positionY - 300,player.fuel,20);
+  pop();
+}
+
 //função para controlar os jogadores
 playerControl(){
 if(keyIsDown(UP_ARROW)){
 player.positionY += 10;
+this.playerMoving = true;
 player.update();
 }
 if(keyIsDown(LEFT_ARROW)){
 player.positionX -= 10;
+this.playerMoving = true;
 player.update();
 }
 if(keyIsDown(RIGHT_ARROW)){
 player.positionX += 10;
+this.playerMoving = true;
 player.update();
  }
 }
+//ajustar para parar de reduzir o combustível enquanto parado
 
 //adiciona os sprites no jogo
 addSprites(spriteGroup, numberOfSprites, spriteImage, scale, positions=[]){
