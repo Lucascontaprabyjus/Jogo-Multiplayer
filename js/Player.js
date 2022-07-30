@@ -34,6 +34,10 @@ addPlayer(){
     name: this.name,
     positionX: this.positionX,
     positionY: this.positionY,
+    rank: this.rank,
+    score: this.score,
+    life: this.life,
+    fuel: this.fuel,
   });
 }
 
@@ -49,6 +53,10 @@ update(){
   database.ref(playerIndex).update({
     positionX: this.positionX,
     positionY: this.positionY,
+    rank: this.rank,
+    score: this.score,
+    life: this.life,
+    fuel: this.fuel,
   });
 }
 

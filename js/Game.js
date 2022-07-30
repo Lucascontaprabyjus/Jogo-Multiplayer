@@ -10,8 +10,9 @@ class Game {
     this.leader2= createElement("h2");
 
     this.playerMoving = false;
-    
 
+    this.leftKeyActive = false;
+  
   }
 
   start() {
@@ -188,6 +189,7 @@ class Game {
 
           this.handleFuel(index);
           this.handleCoins(index);
+          this.obstaclesCollision(index);
         }
       }
       this.playerControl();
@@ -207,6 +209,7 @@ class Game {
     }
   }
 
+  //pegar combustível
   handleFuel(index){
     cars[index-1].overlap(gFuel, function(collector,collected){
       player.fuel = 185;
@@ -223,12 +226,31 @@ class Game {
     }
   }
 
+  //pegar moeda
   handleCoins(index){
     cars[index-1].overlap(gCoin, function(collector,collected){
       player.score += 1;
       player.update();
       collected.remove();
     });
+  }
+
+  //colisão com obstáculos
+  obstaclesCollision(index){
+    if(cars[index-1].collide(gObstacle)){
+      if(this.leftKeyActive){
+        player.positionX +=100;
+      }
+      else{
+        player.positionX -=100;
+      }
+
+      if(player.life > 0){
+        player.life -= 185/4;
+      }
+
+      player.update();
+    }
   }
 
 //sweet alert do ranking
@@ -272,11 +294,13 @@ this.playerMoving = true;
 player.update();
 }
 if(keyIsDown(LEFT_ARROW)){
+this.leftKeyActive = true;
 player.positionX -= 10;
 this.playerMoving = true;
 player.update();
 }
 if(keyIsDown(RIGHT_ARROW)){
+this.leftKeyActive = false;
 player.positionX += 10;
 this.playerMoving = true;
 player.update();
