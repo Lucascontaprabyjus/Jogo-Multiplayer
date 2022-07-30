@@ -10,6 +10,7 @@ var car1, car2, cars = [], car1Img, car2Img;
 var gCoin, gFuel, gObstacle;
 var obstacle1Image, obstacle2Image;
 var lifeImg;
+var blastImg;
 
 function preload() {
   backgroundImage = loadImage("./assets/planodefundo.png");
@@ -21,6 +22,7 @@ function preload() {
   obstacle1Image = loadImage("assets/obstacle1.png");
   obstacle2Image = loadImage("assets/obstacle2.png");
   lifeImg = loadImage("assets/life.png");
+  blastImg = loadImage("assets/blast.png");
 }
 
 function setup() {

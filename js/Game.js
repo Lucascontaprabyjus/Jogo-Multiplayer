@@ -12,6 +12,8 @@ class Game {
     this.playerMoving = false;
 
     this.leftKeyActive = false;
+
+    this.blast = false;
   
   }
 
@@ -24,11 +26,14 @@ class Game {
     //criando carros
   car1 = createSprite(width/2-100, height-100);
   car1.addImage("carro1", car1Img);
+  car1.addImage ("explosão", blastImg)
   car1.scale=0.1
 
   car2 = createSprite(width/2+100, height-100);
   car2.addImage("carro2", car2Img);
+  car2.addImage ("explosão", blastImg)
   car2.scale=0.1
+
 
     //adicionanado a matriz
   cars=[car1, car2];
@@ -177,10 +182,16 @@ class Game {
         //posição dos jogadores
         var x = allPlayers[plr].positionX;
         var y = height - allPlayers[plr].positionY;
-
         cars[index-1].position.x = x;
         cars[index-1].position.y = y;
 
+        var hp = allPlayers[plr].life
+      if(hp <= 0){
+        cars[index - 1].changeImage("explosão");
+        cars[index - 1].scale = 0.1;
+        this.blast = true;
+        this.playerMoving = false;
+      }
         if(index === player.index){
           stroke(10);
           fill("red");
@@ -190,7 +201,15 @@ class Game {
           this.handleFuel(index);
           this.handleCoins(index);
           this.obstaclesCollision(index);
+          this.carsCollision(index);
         }
+      }
+      //vida dos jogadores
+      if(player.life <= 0){
+        setTimeout(()=>{
+          this.gameOver();
+        }, 2000);
+
       }
       this.playerControl();
      
@@ -222,10 +241,9 @@ class Game {
 
     if(player.fuel <=0){
       Gamestate = 2;
-      //this.gameOver();
+      this.gameOver();
     }
   }
-
   //pegar moeda
   handleCoins(index){
     cars[index-1].overlap(gCoin, function(collector,collected){
@@ -253,12 +271,61 @@ class Game {
     }
   }
 
+  //colisão com carros
+  carsCollision(index){
+    if(index == 1){
+      if(cars[index-1].collide(cars[1])){
+      if(this.leftKeyActive){
+        player.positionX +=100;
+      }
+      else{
+        player.positionX -=100;
+      }
+
+      if(player.life > 0){
+        player.life -= 185/4;
+      }
+
+      player.update();
+    } 
+
+    }
+    if(index == 2){
+      if(cars[index-1].collide(cars[0])){
+      if(this.leftKeyActive){
+        player.positionX +=100;
+      }
+      else{
+        player.positionX -=100;
+      }
+
+      if(player.life > 0){
+        player.life -= 185/4;
+      }
+
+      player.update();
+    } 
+
+    }
+  }
+
 //sweet alert do ranking
 showRank(){
   swal({
     title: `Incrível! ${"\n"}Rank${"\n"}${player.rank}`,
     text: "Você alcançou a linha de chegada com sucesso!",
     imageUrl:  "https://raw.githubusercontent.com/vishalgaddam873/p5-multiplayer-car-race-game/master/assets/cup.png",
+    imageSize: "100x100",
+    confirmButtonText: "Ok",
+  });
+}
+
+//sweet alert game over
+gameOver(){
+  swal({
+    title: `Game Over! ${"\n"}Rank${"\n"}${player.rank}`,
+    text: "Você perdeu",
+    imageUrl:  "https://cdn.shopify.com/s/files/1/1061/1924/products/Thumbs_Down_Sign_Emoji_Icon_ios10_grande.png",
     imageSize: "100x100",
     confirmButtonText: "Ok",
   });
@@ -278,35 +345,43 @@ showLife(){
 //mostrar o combustível
 showFuel(){
 push();
-  image(fuelImg,width/2-130, height - player.positionY - 300, 20,20);
+  image(fuelImg,width/2-130, height - player.positionY - 360, 20,20);
   fill("white");
-  rect(width/2-100,height - player.positionY - 300, 185,20);
+  rect(width/2-100,height - player.positionY - 360, 185,20);
   fill("brown");
-  rect(width/2-100,height - player.positionY - 300,player.fuel,20);
+  rect(width/2-100,height - player.positionY - 360,player.fuel,20);
   pop();
 }
 
 //função para controlar os jogadores
 playerControl(){
-if(keyIsDown(UP_ARROW)){
+if(keyIsDown(UP_ARROW) && !this.blast){
 player.positionY += 10;
 this.playerMoving = true;
 player.update();
 }
-if(keyIsDown(LEFT_ARROW)){
+else{
+  this.playerMoving = false;
+ }
+if(keyIsDown(LEFT_ARROW) && !this.blast){
 this.leftKeyActive = true;
 player.positionX -= 10;
 this.playerMoving = true;
 player.update();
 }
-if(keyIsDown(RIGHT_ARROW)){
+ else{
+  this.playerMoving = false;
+ }
+if(keyIsDown(RIGHT_ARROW)  && !this.blast){
 this.leftKeyActive = false;
 player.positionX += 10;
 this.playerMoving = true;
 player.update();
  }
+ else{
+  this.playerMoving = false;
+ }
 }
-//ajustar para parar de reduzir o combustível enquanto parado
 
 //adiciona os sprites no jogo
 addSprites(spriteGroup, numberOfSprites, spriteImage, scale, positions=[]){
